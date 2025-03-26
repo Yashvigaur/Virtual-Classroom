@@ -1,3 +1,24 @@
+
+/*
+
+Copyright 2024 Himanshu Dinkar
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
+
+
 import { useState, useEffect, useContext, createContext, useMemo } from "react";
 
 // Create the AuthContext
@@ -16,7 +37,7 @@ const AuthContextProvider = ({ children }) => {
     const [token, setToken] = useState("");
     
    
-    // Check for token in localStorage on mount
+    
     useEffect(() => {
         const localToken = localStorage.getItem("token");
         if (localToken) {
@@ -25,18 +46,17 @@ const AuthContextProvider = ({ children }) => {
     }, []);
 
 
-    // Logout function
     const logout = () => {
         localStorage.removeItem("token");
         setToken("");
     };
 
-    // Context value with useMemo for performance optimization
+    
     const value = useMemo(
         () => ({
             token,
             setToken,
-            isAuthenticated: !!token, // Helper for login status
+            isAuthenticated: !!token, 
             logout,
         }),
         [token]

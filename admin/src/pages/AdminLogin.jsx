@@ -1,11 +1,31 @@
+/*
+
+Copyright 2024 Himanshu Dinkar
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 import { useState , useEffect} from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AuthSidebar from "../shared/AuthSidebar";
+import clsx from 'clsx';
 
 function AdminLogin() {
   const [email, setEmail] = useState("");
+  const [errors,setErrors]=useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [token,setToken]=useState('');
@@ -35,9 +55,11 @@ function AdminLogin() {
       }
     } catch (error) {
       console.log("Some error occured", error);
-      if (error.response && error.response.data && error.response.data.message) {
+      if (error.response?.data?.message) {
+        setErrors(error.response.data.message);
         toast.error(error.response.data.message);
       } else {
+        setErrors("Some unexpected error occured. Please try again.")
         toast.error("Some unexpected error occurred. Please try again.");
       }
     } finally {
@@ -55,25 +77,11 @@ function AdminLogin() {
   return (
     <div className="min-h-screen flex bg-gradient-to-r from-blue-500 to-teal-500">
       {/* Left Section with Image and Text */}
-      <div className="w-full md:w-1/2 h-screen flex justify-center items-center p-8  bg-gradient-to-r from-blue-600 to-violet-700 text-white">
-        <div className="text-center flex gap-5 space-y-6">
-          <img
-            className="mx-auto h-[40%] w-[40%]"
-            src="https://png.pngtree.com/png-vector/20240616/ourmid/pngtree-man-using-laptop-png-image_12780624.png"
-            alt="Learning"
-          />
-          <div className="para-detail flex flex-col gap-6 ">
-          <h1 className="text-4xl font-extrabold mt-8">Wanted to make Education Awesome??</h1>
-          <p className="text-lg text-yellow-300 font-medium">
-            Bridging the Gap Between Knowledge and Success. Learning Beyond Boundaries!
-          </p>
-          </div>
-          
-        </div>
-      </div>
+      <AuthSidebar/>
 
       {/* Right Section with Form */}
-      <div className="w-full md:w-1/2 flex justify-center items-center p-8 bg-white">
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8 bg-gray-50">
+      <p  className={clsx(errors && "border border-red-700 flex items-center justify-center p-3 h-[8%] w-[63%] text-red-700 rounded-md mb-4 bg-yellow-50 font-semibold text-wrap max-md:w-full max-md:font-medium")} > {errors} </p>
         <form
           className="w-full max-w-md p-8 bg-gray-100 rounded-lg shadow-lg space-y-6"
           onSubmit={handleSubmit}
