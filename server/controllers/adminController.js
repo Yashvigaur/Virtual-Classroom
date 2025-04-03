@@ -94,9 +94,11 @@ const collegeLogin = async(req,res)=>{
 
        res.cookie("token",token,{
         httpOnly:true,
-        secure: false,
-        sameSite:"lax"
-        
+        secure:process.env.NODE_ENV==="production"?true:false,
+        sameSite:process.env.NODE_ENV==="production"?"none":"lax",
+        maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+        path: '/', // Apply to all paths
+        overwrite: true // Ensure it overwrites any existing token cookie
        })
 
        return res.status(200).json({
